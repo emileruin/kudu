@@ -115,7 +115,11 @@ impl Os {
                     Ok(n) => {
                         if !content.is_empty() && n == 0 {
                             let file_name = path.file_name().unwrap().to_str().unwrap();
-                            path.set_file_name(format!("{file_name}.xz"));
+
+                            if let Os::Freebsd(_) = self {
+                                path.set_file_name(format!("{file_name}.xz"));
+                            };
+
                             fs::write(&path, content)?;
 
                             if let Os::Freebsd(_) = self {
