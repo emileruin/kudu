@@ -1,3 +1,7 @@
+## v0.4.2 - 2026-10-10
+
+- fix: only use .xz for freebsd downloaded os files
+
 ## v0.4.1 - 2026-10-02
 
 - Display the release version in the VM information
