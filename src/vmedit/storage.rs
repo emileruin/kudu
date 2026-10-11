@@ -288,8 +288,7 @@ impl StorageEdit {
                         } else {
                             "-".to_string()
                         }
-                    })
-                    .centered(),
+                    }),
                     Line::from(drive.interface.to_string()),
                     Line::from(
                         drive
@@ -314,7 +313,7 @@ impl StorageEdit {
                     "New".to_string(),
                     "Disk    ".to_string(),
                     drive.format.to_string(),
-                    format!("{} GiB", drive.size),
+                    format!("{:>3}GiB", drive.size),
                     drive.interface.to_string(),
                     "-".to_string(),
                 ])
@@ -331,7 +330,7 @@ impl StorageEdit {
                         Line::from(""),
                         Line::from("Type"),
                         Line::from("Format"),
-                        Line::from("Size").centered(),
+                        Line::from("Size"),
                         Line::from("Interface"),
                         Line::from("File Name"),
                     ])

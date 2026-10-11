@@ -746,29 +746,25 @@ impl VM {
                     lines.push(Line::from(vec![
                         Span::from("Disks").bold().fg(Color::Yellow),
                         Span::from(" ".repeat(18)),
-                        Span::from(" Size   ").bold(),
-                        Span::from(" ".repeat(4)),
-                        Span::from(" Format ").bold(),
-                        Span::from(" ".repeat(4)),
-                        Span::from(" Interface ").bold(),
+                        Span::from(format!("{:10}", "Size")).bold(),
+                        Span::from(format!("{:10}", "Format")).bold(),
+                        Span::from(format!("{:10}", "Interface")).bold(),
                     ]));
                     lines.push(Line::from(""));
                     for (index, disk) in disks.iter().enumerate() {
                         lines.push(Line::from(vec![
                             Span::from(" ".repeat(17)),
                             Span::from(index.to_string()),
-                            Span::from(" ".repeat(4)),
+                            Span::from(" ".repeat(5)),
                             Span::from({
                                 if let Some(size) = disk.size {
-                                    Drive::format_size(size)
+                                    format!("{:10}", Drive::format_size(size))
                                 } else {
-                                    "-".to_string()
+                                    format!("{:10}", "-")
                                 }
                             }),
-                            Span::from(" ".repeat(8)),
-                            Span::from(disk.format.to_string()),
-                            Span::from(" ".repeat(7)),
-                            Span::from(disk.interface.to_string()),
+                            Span::from(format!("{:10}", disk.format)),
+                            Span::from(format!("{:10}", disk.interface)),
                         ]))
                     }
                     lines.push(Line::from(""));
@@ -788,26 +784,33 @@ impl VM {
                         Line::from(""),
                     ]
                 } else {
+                    let width = self
+                        .fs
+                        .iter()
+                        .map(|fs| fs.source_path.to_string_lossy().len())
+                        .max()
+                        .unwrap_or(0)
+                        + 4;
+
                     lines.push(Line::from(vec![
                         Span::from("Filesystem").bold().fg(Color::Yellow),
                         Span::from(" ".repeat(7)),
-                        Span::from("Source Path ").bold(),
-                        Span::from(" ".repeat(10)),
-                        Span::from(" Mount Tag ").bold(),
-                        Span::from(" ".repeat(12)),
-                        Span::from(" Readonly ").bold(),
-                        Span::from(" ".repeat(2)),
-                        Span::from(" Drive ").bold(),
+                        Span::from(format!("{:<width$}", "Source Path", width = width)).bold(),
+                        Span::from(format!("{:<12}", "Mount Tag ")).bold(),
+                        Span::from(format!("{:10}", "Readonly")).bold(),
+                        Span::from(format!("{:5}", "Drive")).bold(),
                     ]));
                     lines.push(Line::from(""));
                     for fs in &self.fs {
                         lines.push(Line::from(vec![
                             Span::from(" ".repeat(17)),
-                            Span::from(format!("{:23}", fs.source_path.to_string_lossy())),
-                            Span::from(format!("{:15}", fs.mount_tag)),
-                            Span::from(" ".repeat(8)),
-                            Span::from(format!("{:3}", if fs.readonly { "Yes" } else { "No" })),
-                            Span::from(" ".repeat(9)),
+                            Span::from(format!(
+                                "{:<width$}",
+                                fs.source_path.to_string_lossy(),
+                                width = width
+                            )),
+                            Span::from(format!("{:<12}", fs.mount_tag)),
+                            Span::from(format!("{:10}", if fs.readonly { "Yes" } else { "No" })),
                             Span::from(fs.driver.to_string()),
                         ]))
                     }
@@ -830,26 +833,20 @@ impl VM {
                     lines.push(Line::from(vec![
                         Span::from("Networks").bold().fg(Color::Yellow),
                         Span::from(" ".repeat(9)),
-                        Span::from("id     ").bold(),
-                        Span::from(" ".repeat(7)),
-                        Span::from("Backend").bold(),
-                        Span::from(" ".repeat(12)),
-                        Span::from("  Nic  ").bold(),
-                        Span::from(" ".repeat(14)),
-                        Span::from("  Mac  ").bold(),
+                        Span::from(format!("{:12}", "id")).bold(),
+                        Span::from(format!("{:12}", "Backend")).bold(),
+                        Span::from(format!("{:18}", "Nic")).bold(),
+                        Span::from(format!("{:17}", "Mac")).bold(),
                     ]));
                     lines.push(Line::from(""));
                     for network in &self.networks {
                         lines.push(Line::from(vec![
                             Span::from(" ".repeat(17)),
-                            Span::from(format!("{:8}", network.id)),
-                            Span::from(" ".repeat(6)),
-                            Span::from(format!("{:14}", network.backend)),
-                            Span::from(" ".repeat(7)),
-                            Span::from(format!("{:14}", network.nic)),
-                            Span::from(" ".repeat(7)),
+                            Span::from(format!("{:<12}", network.id)),
+                            Span::from(format!("{:<12}", network.backend)),
+                            Span::from(format!("{:<18}", network.nic)),
                             Span::from(format!(
-                                "{:17}",
+                                "{:<17}",
                                 network.mac.clone().unwrap_or("Auto".to_string())
                             )),
                         ]))
@@ -884,26 +881,20 @@ impl VM {
                     lines.push(Line::from(vec![
                         Span::from("Port Forwarding").bold().fg(Color::Yellow),
                         Span::from(" ".repeat(2)),
-                        Span::from("Network").bold(),
-                        Span::from(" ".repeat(7)),
-                        Span::from("Protocol").bold(),
-                        Span::from(" ".repeat(4)),
-                        Span::from("Guest Port").bold(),
-                        Span::from(" ".repeat(4)),
-                        Span::from("Host Port").bold(),
+                        Span::from(format!("{:12}", "Network")).bold(),
+                        Span::from(format!("{:12}", "Protocol")).bold(),
+                        Span::from(format!("{:12}", "Guest Port")).bold(),
+                        Span::from(format!("{:12}", "Host Port")).bold(),
                     ]));
                     lines.push(Line::from(""));
 
                     for (network_id, mapping) in port_mappings {
                         lines.push(Line::from(vec![
                             Span::from(" ".repeat(17)),
-                            Span::from(network_id),
-                            Span::from(" ".repeat(6)),
-                            Span::from(format!("{:3}", mapping.protocol)),
-                            Span::from(" ".repeat(6)),
-                            Span::from(format!("{:5}", mapping.guest_port)),
-                            Span::from(" ".repeat(11)),
-                            Span::from(format!("{:5}", mapping.host_port)),
+                            Span::from(format!("{:<12}", network_id)),
+                            Span::from(format!("{:<12}", mapping.protocol)),
+                            Span::from(format!("{:<12}", mapping.guest_port)),
+                            Span::from(format!("{:<12}", mapping.host_port)),
                         ]))
                     }
                     lines.push(Line::from(""));

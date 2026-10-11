@@ -134,10 +134,10 @@ impl FsEdit {
         } else {
             let widths = [
                 Constraint::Length(6),
-                Constraint::Length(20),
-                Constraint::Length(20),
+                Constraint::Min(25),
+                Constraint::Length(14),
                 Constraint::Length(8),
-                Constraint::Length(10),
+                Constraint::Length(5),
             ];
 
             let vm_fs = self.fs.iter().map(|fs| {
@@ -171,7 +171,7 @@ impl FsEdit {
             let added_fs = self.added_fs.iter().map(|fs| {
                 Row::new(vec![
                     Line::from("New"),
-                    Line::from(fs.source_path.to_string_lossy().to_string()),
+                    Line::from(format!("{:<25}", fs.source_path.to_string_lossy())),
                     Line::from(fs.mount_tag.clone()),
                     Line::from({
                         if fs.readonly {

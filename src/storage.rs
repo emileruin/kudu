@@ -40,13 +40,13 @@ impl Drive {
     pub fn format_size(size: u64) -> String {
         match size {
             0..1_000_000 => {
-                format!("{:3}KiB", size / 1024)
+                format!("{:>3}KiB", size / 1024)
             }
             1_000_000..1_000_000_000 => {
-                format!("{:3}MiB", size / (1024 * 1024))
+                format!("{:>3}MiB", size / (1024 * 1024))
             }
             _ => {
-                format!("{:3}GiB", size / (1024 * 1024 * 1024))
+                format!("{:>3}GiB", size / (1024 * 1024 * 1024))
             }
         }
     }
