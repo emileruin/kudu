@@ -70,13 +70,13 @@ impl MappingBuilder {
     }
     pub fn handle_key_events(&mut self, key_event: KeyEvent) {
         match key_event.code {
-            KeyCode::Down | KeyCode::Char('j') => match self.section {
+            KeyCode::Down | KeyCode::Char('j') | KeyCode::Tab => match self.section {
                 Section::Network => self.section = Section::GuestPort,
                 Section::GuestPort => self.section = Section::HostPort,
                 Section::HostPort => self.section = Section::Protocol,
                 Section::Protocol => self.section = Section::Network,
             },
-            KeyCode::Up | KeyCode::Char('k') => match self.section {
+            KeyCode::Up | KeyCode::Char('k') | KeyCode::BackTab => match self.section {
                 Section::Network => self.section = Section::Protocol,
                 Section::GuestPort => self.section = Section::Network,
                 Section::HostPort => self.section = Section::GuestPort,

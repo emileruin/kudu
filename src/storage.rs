@@ -231,12 +231,12 @@ impl DiskBuilder {
 
     pub fn handle_key_events(&mut self, key_event: KeyEvent, arch: Arch) {
         match key_event.code {
-            KeyCode::Down | KeyCode::Char('j') => match self.section {
+            KeyCode::Down | KeyCode::Char('j') | KeyCode::Tab => match self.section {
                 Section::Size => self.section = Section::Format,
                 Section::Format => self.section = Section::Interface,
                 Section::Interface => self.section = Section::Size,
             },
-            KeyCode::Up | KeyCode::Char('k') => match self.section {
+            KeyCode::Up | KeyCode::Char('k') | KeyCode::BackTab => match self.section {
                 Section::Size => self.section = Section::Interface,
                 Section::Format => self.section = Section::Size,
                 Section::Interface => self.section = Section::Format,

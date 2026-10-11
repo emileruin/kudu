@@ -785,6 +785,9 @@ impl EditVM {
                         Span::from(" | "),
                         Span::from("Enter").bold(),
                         Span::from(" Confirm"),
+                        Span::from(" | "),
+                        Span::from("⇄").bold(),
+                        Span::from(" Nav"),
                     ])]
                 } else {
                     if block_width >= 113 {

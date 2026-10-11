@@ -84,7 +84,7 @@ impl NewFs {
 
     pub fn handle_key_events(&mut self, key_event: KeyEvent) {
         match key_event.code {
-            KeyCode::Down => match self.section {
+            KeyCode::Down | KeyCode::Tab => match self.section {
                 Section::SourcePath => {
                     self.section = Section::MountTag;
                 }
@@ -95,7 +95,7 @@ impl NewFs {
                     self.section = Section::SourcePath;
                 }
             },
-            KeyCode::Up => match self.section {
+            KeyCode::Up | KeyCode::BackTab => match self.section {
                 Section::SourcePath => {
                     self.section = Section::ReadOnly;
                 }

@@ -301,12 +301,12 @@ impl NewNetwork {
 
     pub fn handle_key_events(&mut self, key_event: KeyEvent) {
         match key_event.code {
-            KeyCode::Down | KeyCode::Char('j') => match self.section {
+            KeyCode::Down | KeyCode::Char('j') | KeyCode::Tab => match self.section {
                 Section::Backend => self.section = Section::Nic,
                 Section::Nic => self.section = Section::Mac,
                 Section::Mac => self.section = Section::Backend,
             },
-            KeyCode::Up | KeyCode::Char('k') => match self.section {
+            KeyCode::Up | KeyCode::Char('k') | KeyCode::BackTab => match self.section {
                 Section::Backend => self.section = Section::Mac,
                 Section::Nic => self.section = Section::Backend,
                 Section::Mac => self.section = Section::Nic,

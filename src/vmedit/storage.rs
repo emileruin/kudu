@@ -373,6 +373,9 @@ impl StorageEdit {
                 Span::from(" | "),
                 Span::from("Enter").bold(),
                 Span::from(" Confirm"),
+                Span::from(" | "),
+                Span::from("⇄").bold(),
+                Span::from(" Nav"),
             ])]
         } else {
             vec![Line::from(vec![

@@ -442,6 +442,9 @@ impl Advanced {
                         Span::from(" | "),
                         Span::from("Enter").bold(),
                         Span::from(" Confirm"),
+                        Span::from(" | "),
+                        Span::from("⇄").bold(),
+                        Span::from(" Nav"),
                     ])]
                 } else {
                     vec![Line::from(vec![
@@ -485,6 +488,9 @@ impl Advanced {
                         Span::from(" | "),
                         Span::from("Enter").bold(),
                         Span::from(" Confirm"),
+                        Span::from(" | "),
+                        Span::from("⇄").bold(),
+                        Span::from(" Nav"),
                     ])]
                 } else {
                     vec![Line::from(vec![
@@ -528,6 +534,9 @@ impl Advanced {
                         Span::from(" | "),
                         Span::from("Enter").bold(),
                         Span::from(" Confirm"),
+                        Span::from(" | "),
+                        Span::from("⇄").bold(),
+                        Span::from(" Nav"),
                     ])]
                 } else {
                     vec![Line::from(vec![
@@ -586,6 +595,9 @@ impl Advanced {
                         Span::from(" | "),
                         Span::from("Enter").bold(),
                         Span::from(" Confirm"),
+                        Span::from(" | "),
+                        Span::from("⇄").bold(),
+                        Span::from(" Nav"),
                     ])]
                 } else {
                     vec![Line::from(vec![
