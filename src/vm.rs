@@ -19,7 +19,10 @@ use ratatui::{
     layout::{Constraint, Direction, Flex, Layout, Margin, Rect},
     style::{Color, Style, Stylize},
     text::{Line, Span, Text},
-    widgets::{Block, BorderType, Borders, List, ListItem, ListState},
+    widgets::{
+        Block, BorderType, Borders, List, ListItem, ListState, Scrollbar, ScrollbarOrientation,
+        ScrollbarState,
+    },
 };
 
 use crate::{
@@ -75,6 +78,9 @@ pub struct VM {
     #[serde(skip)]
     #[serde(default = "default_state")]
     pub state: RunState,
+
+    #[serde(skip)]
+    pub scroll_offset: usize,
 }
 
 fn default_state() -> RunState {
@@ -281,6 +287,7 @@ impl VM {
             state: RunState::shutdown,
             remote_access: data.remote_access,
             graphics: data.graphics,
+            scroll_offset: 0,
         };
 
         let data = serde_json::to_string_pretty(&vm)?;
@@ -944,14 +951,36 @@ impl VM {
                 Line::from(""),
             ]));
         }
-        let list = List::new(items);
 
-        frame.render_widget(
+        let items_height: usize = items.iter().map(|item| item.height()).sum();
+
+        if infos_block.height < items_height as u16 {
+            let scrollbar = Scrollbar::new(ScrollbarOrientation::VerticalRight)
+                .begin_symbol(Some("↑"))
+                .end_symbol(Some("↓"));
+
+            let mut scrollbar_state = ScrollbarState::new(items.len()).position(self.scroll_offset);
+
+            frame.render_stateful_widget(
+                scrollbar,
+                infos_block.inner(Margin {
+                    vertical: 1,
+                    horizontal: 0,
+                }),
+                &mut scrollbar_state,
+            );
+        }
+
+        let list = List::new(items);
+        let mut list_state = ListState::default().with_offset(self.scroll_offset);
+
+        frame.render_stateful_widget(
             list,
             infos_block.inner(Margin {
                 horizontal: 4,
                 vertical: 2,
             }),
+            &mut list_state,
         );
 
         // Events

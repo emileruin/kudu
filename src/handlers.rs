@@ -64,19 +64,35 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App, sender: Sender<Even
             }
 
             KeyCode::Char('j') => {
-                let index = match app.vm_list_state.selected() {
-                    Some(i) => min(i + 1, app.vms.len() - 1),
-                    None => 0,
-                };
-                app.vm_list_state.select(Some(index));
+                if key_event.modifiers == KeyModifiers::CONTROL {
+                    if let Some(index) = app.vm_list_state.selected()
+                        && let Some(vm) = app.vms.get_mut(index)
+                    {
+                        vm.scroll_offset += 1;
+                    }
+                } else {
+                    let index = match app.vm_list_state.selected() {
+                        Some(i) => min(i + 1, app.vms.len() - 1),
+                        None => 0,
+                    };
+                    app.vm_list_state.select(Some(index));
+                }
             }
 
             KeyCode::Char('k') => {
-                let index = match app.vm_list_state.selected() {
-                    Some(i) => i.saturating_sub(1),
-                    None => 0,
-                };
-                app.vm_list_state.select(Some(index));
+                if key_event.modifiers == KeyModifiers::CONTROL {
+                    if let Some(index) = app.vm_list_state.selected()
+                        && let Some(vm) = app.vms.get_mut(index)
+                    {
+                        vm.scroll_offset = vm.scroll_offset.saturating_sub(1);
+                    }
+                } else {
+                    let index = match app.vm_list_state.selected() {
+                        Some(i) => i.saturating_sub(1),
+                        None => 0,
+                    };
+                    app.vm_list_state.select(Some(index));
+                }
             }
 
             KeyCode::Char('d') => {
