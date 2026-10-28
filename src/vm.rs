@@ -117,7 +117,7 @@ impl VM {
                             }
                         }
 
-                        vm.load_events_from_file()?;
+                        let _ = vm.load_events_from_file();
 
                         vms.push(vm);
                     }
